@@ -14,8 +14,16 @@ export function getSupabaseEnv() {
   };
 }
 
+/**
+ * Canonical origin for sitemap, hreflang, Open Graph and JSON-LD.
+ * Order: explicit NEXT_PUBLIC_SITE_URL -> Vercel's production domain (system
+ * variable, no protocol) -> localhost for local development.
+ */
 export function getSiteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  const vercelProd = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const url = explicit || (vercelProd ? `https://${vercelProd}` : "http://localhost:3000");
+  return url.replace(/\/$/, "");
 }
 
 export function getFallbackContactEmail(): string {
