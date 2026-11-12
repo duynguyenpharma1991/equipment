@@ -101,17 +101,31 @@ h4 {
 .topbar-info {
   display: flex;
   gap: 20px;
-  flex-wrap: wrap;
+  /* One line always; the email shrinks with an ellipsis instead of wrapping. */
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.topbar-info a {
+  white-space: nowrap;
+  flex: none;
+}
+.topbar-info a:first-child {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .topbar a:hover {
   color: #fff;
 }
 .lang-switch {
   display: flex;
+  flex: none;
   gap: 4px;
   align-items: center;
 }
 .lang-switch a,
+.lang-switch .active,
 .lang-switch button {
   background: transparent;
   border: 1px solid transparent;
@@ -121,11 +135,15 @@ h4 {
   font-size: 12px;
   cursor: pointer;
   font-family: inherit;
+  white-space: nowrap;
 }
 .lang-switch .active {
   background: #fff;
   color: var(--navy);
   font-weight: 700;
+}
+.lang-short {
+  display: none;
 }
 .lang-switch a:hover {
   border-color: #fff;
@@ -1154,6 +1172,46 @@ h4 {
 @media (max-width: 560px) {
   .container {
     padding: 0 14px;
+  }
+  .topbar .container {
+    gap: 8px;
+  }
+  .topbar-info {
+    gap: 12px;
+  }
+  /* Phones: "VI | EN" instead of "Tiếng Việt | English" leaves room for the email. */
+  .lang-full {
+    display: none;
+  }
+  .lang-short {
+    display: inline;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .lang-switch a,
+  .lang-switch .active {
+    padding: 3px 10px;
+  }
+  .site-header .mainbar {
+    gap: 12px;
+  }
+  /* Logo takes the remaining width (name may wrap to 2 lines) so the Menu
+     button stays on the same row; the open menu still wraps below the bar. */
+  .logo {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 1.15;
+    white-space: normal;
+  }
+  .logo-mark {
+    flex: none;
+    width: 34px;
+    height: 34px;
+  }
+  .menu-toggle {
+    flex: none;
   }
   .grid-2,
   .grid-3,

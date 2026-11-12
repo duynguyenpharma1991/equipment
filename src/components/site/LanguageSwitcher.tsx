@@ -7,6 +7,18 @@ import type { Locale } from "@/lib/types";
 
 const LABELS: Record<Locale, string> = { vi: "Tiếng Việt", en: "English" };
 
+/** Full name on wide screens, short code (VI / EN) on phones — switched in CSS. */
+function Label({ locale }: { locale: Locale }) {
+  return (
+    <>
+      <span className="lang-full">{LABELS[locale]}</span>
+      <span className="lang-short" aria-hidden="true">
+        {locale.toUpperCase()}
+      </span>
+    </>
+  );
+}
+
 function swap(pathname: string, target: Locale): string {
   const parts = pathname.split("/");
   // parts[0] === "" ; parts[1] is the current locale segment
@@ -23,19 +35,22 @@ export function LanguageSwitcher({ current }: { current: Locale }) {
     <div className="lang-switch" role="group" aria-label="Language">
       {locales.map((l) =>
         l === current ? (
-          <span key={l} className="active" aria-current="true">
-            {LABELS[l]}
+          <span key={l} className="active" aria-current="true" title={LABELS[l]}>
+            <Label locale={l} />
           </span>
         ) : (
           <Link
             key={l}
             href={swap(pathname, l)}
             hrefLang={l}
+            lang={l}
+            aria-label={LABELS[l]}
+            title={LABELS[l]}
             onClick={() => {
               document.cookie = `NEXT_LOCALE=${l}; path=/; max-age=31536000; samesite=lax`;
             }}
           >
-            {LABELS[l]}
+            <Label locale={l} />
           </Link>
         ),
       )}
@@ -49,12 +64,12 @@ export function LanguageSwitcherFallback({ current }: { current: Locale }) {
     <div className="lang-switch" role="group" aria-label="Language">
       {locales.map((l) =>
         l === current ? (
-          <span key={l} className="active">
-            {LABELS[l]}
+          <span key={l} className="active" title={LABELS[l]}>
+            <Label locale={l} />
           </span>
         ) : (
-          <Link key={l} href={`/${l}`} hrefLang={l}>
-            {LABELS[l]}
+          <Link key={l} href={`/${l}`} hrefLang={l} lang={l} aria-label={LABELS[l]} title={LABELS[l]}>
+            <Label locale={l} />
           </Link>
         ),
       )}
