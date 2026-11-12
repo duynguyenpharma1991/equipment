@@ -192,20 +192,16 @@ export async function searchProducts(term: string): Promise<ProductCardData[]> {
   cacheTag("products");
   const q = escapeLike(term);
   if (!q) return [];
-  const pattern = `%${q}%`;
+  // Also match when the visitor leaves out the separator: "bp260" / "bp 260" -> "BP-260".
+  // `%` goes between a letter run and a digit run, and in place of spaces.
+  const loose = q.replace(/(\p{L})(\d)|(\d)(\p{L})/gu, (_m, a, b, c, d) => `${a ?? c}%${b ?? d}`).replace(/ /g, "%");
+  const patterns = [...new Set([`%${q}%`, `%${loose}%`])];
+  const fields = ["name_vi", "name_en", "model_code", "summary_vi", "summary_en"];
   const { data, error } = await createPublicClient()
     .from("products")
     .select(CARD_COLUMNS)
     .eq("status", "published")
-    .or(
-      [
-        `name_vi.ilike.${pattern}`,
-        `name_en.ilike.${pattern}`,
-        `model_code.ilike.${pattern}`,
-        `summary_vi.ilike.${pattern}`,
-        `summary_en.ilike.${pattern}`,
-      ].join(","),
-    )
+    .or(fields.flatMap((f) => patterns.map((p) => `${f}.ilike.${p}`)).join(","))
     .order("sort_order", { ascending: true })
     .limit(60);
   if (error) fail("search", error.message);

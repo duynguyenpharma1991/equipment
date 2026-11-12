@@ -293,6 +293,40 @@ h4 {
 .search-box button:hover {
   background: var(--green-dark);
 }
+/* Big search field on the search page */
+.search-page-form {
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+.search-box.large {
+  border-radius: 8px;
+  border-color: var(--green);
+}
+.search-box.large input {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  padding: 13px 16px;
+  font-size: 16px; /* >=16px stops iOS from zooming on focus */
+}
+.search-box.large button {
+  padding: 0 22px;
+  font-size: 20px;
+}
+.search-empty {
+  text-align: center;
+}
+.search-empty .empty {
+  padding: 4px 0 16px;
+}
+.search-empty .search-help {
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.search-empty .chips {
+  justify-content: center;
+  margin-bottom: 20px;
+}
 
 .menu-toggle {
   display: none;
