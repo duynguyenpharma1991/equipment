@@ -402,7 +402,7 @@ h4 {
 
 /* ---------- Sections ---------- */
 .section {
-  padding: 54px 0;
+  padding-block: 54px;
 }
 .section.alt {
   background: var(--bg);
@@ -976,7 +976,14 @@ h4 {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1.2fr;
   gap: 36px;
-  padding: 44px 0 30px;
+  /* padding-block (not shorthand) so .container's horizontal padding survives */
+  padding-block: 44px 30px;
+}
+.site-footer .logo {
+  color: #fff;
+}
+.site-footer .logo-mark {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 .site-footer h3 {
   color: #fff;
@@ -1032,7 +1039,7 @@ h4 {
 }
 .notfound {
   text-align: center;
-  padding: 90px 0;
+  padding-block: 90px;
 }
 .notfound h1 {
   font-size: 64px;
@@ -1175,7 +1182,7 @@ h4 {
     display: none;
   }
   .section {
-    padding: 38px 0;
+    padding-block: 38px;
   }
 }
 
